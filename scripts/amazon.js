@@ -53,7 +53,7 @@ products.forEach((product) => {
 
         <div class="product-spacer"></div>
 
-        <div class="added-to-cart">
+        <div class="added-to-cart js-added-${product.id}">
             <img src="images/icons/checkmark.png">
             Added
         </div>
@@ -73,9 +73,12 @@ document.querySelector('.js-products-grid').innerHTML = productsHTML;
 // data attributes have same syntax (name - value)
 // but data attribute has to start with "data-"
 // it has to be separated by dash though (eg data-ryan-sucks)
+
+// each product would have its own timeout id
+let timeoutIdList = {};
 document.querySelectorAll('.js-add-to-cart').forEach((button) => {
     button.addEventListener('click', ()=> {
-        
+
         const {productId} = button.dataset; // productId from product-id
         const cartSelect = document.querySelector(`.js-quantity-selector-${productId}`);
 
@@ -105,6 +108,22 @@ document.querySelectorAll('.js-add-to-cart').forEach((button) => {
         });
         
         document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
+
+        const addedMsg = document.querySelector(`.js-added-${productId}`);
+        addedMsg.classList.add('js-added-to-cart-visible');
+
+        // clear the time id if already active
+        let existTimeId = timeoutIdList[productId];
+        if (existTimeId) {
+            clearTimeout(existTimeId);
+        }
+
+        let timeoutId = setTimeout(() => {
+            addedMsg.classList.remove('js-added-to-cart-visible');
+        }, 2000);
+
+        // add timeout id to object using the product id as property
+        timeoutIdList[productId] = timeoutId;
 
     });
 });
