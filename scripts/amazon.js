@@ -58,13 +58,43 @@ products.forEach((product) => {
             Added
         </div>
 
-        <button class="add-to-cart-button button-primary">
+        <button class="add-to-cart-button button-primary js-add-to-cart"
+        data-product-id="${product.id}">
             Add to Cart
         </button>
     </div>
     `;
 })
 
-console.log(productsHTML);
-
 document.querySelector('.js-products-grid').innerHTML = productsHTML;
+
+// data attribute of html
+// it allows us to attach any information to an element
+// data attributes have same syntax (name - value)
+// but data attribute has to start with "data-"
+// it has to be separated by dash though (eg data-ryan-sucks)
+document.querySelectorAll('.js-add-to-cart').forEach((button) => {
+    button.addEventListener('click', ()=> {
+        const productId = button.dataset.productId; // productId from product-id
+
+        // check if product already in cart and increment
+        let matchingItem;
+        cart.forEach((item) => {
+            if (productId === item.productId) {
+                matchingItem = item;
+            }
+        });
+
+        if (matchingItem) {
+            matchingItem.quantity++;
+        } else {
+            cart.push({
+                productId: productId,
+                quantity: 1
+            });
+        }
+        
+        console.log(cart);
+    });
+});
+
