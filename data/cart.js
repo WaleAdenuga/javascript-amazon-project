@@ -1,15 +1,18 @@
 // keep code organised
 // cart can be used outside cart.js
+// we'll update cart with deliveryoptionid. that object exists on its own
 export let cart = JSON.parse(localStorage.getItem('cart')) || [
     {
         // we use productId to load other things like image, price etc
         // that's called normalizing the data
         productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
-        quantity: 2
+        quantity: 2,
+        deliveryOptionId: '1'
     },
     {
         productId: '15b6fc6f-327a-4ec4-896f-486349e85a3d',
-        quantity: 1
+        quantity: 1,
+        deliveryOptionId: '2'
     }
 ];
 
@@ -27,8 +30,9 @@ export function addToCart(productId, quantity) {
         matchingItem.quantity += quantity;
     } else { // new cart entry
         cart.push({
-            productId,
-            quantity
+            productId: productId,
+            quantity: 1,
+            deliveryOptionId: '1'
         });
     }
     saveToStorage();
@@ -70,4 +74,16 @@ export function updateQuantity(productId, newQuantity) {
             saveToStorage();
         }
     });
+}
+
+export function updateDeliveryOption(productId, deliveryOptionId) {
+    let matchingItem;
+    cart.forEach((cartItem) => {
+        if (productId === cartItem.productId) {
+            matchingItem = cartItem;
+        }
+    });
+    matchingItem.deliveryOptionId = deliveryOptionId;
+
+    saveToStorage();
 }
