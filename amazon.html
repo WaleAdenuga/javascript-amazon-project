@@ -57,9 +57,16 @@
       </div>
     </div>
 
-    <!--runs files 1 by 1 (ORDER MATTERS), first creating the cart then the array in products.js then generating html in amazon.js-->
-    <script src="data/cart.js"></script>
-    <script src="data/products.js"></script>
-    <script src="scripts/amazon.js"></script>
+    <!--runs files 1 by 1 (ORDER MATTERS), first creating the cart then the array in products.js then generating html in amazon.js
+    could actually cause naming conflicts - soluton is to use module
+    a module contains a variable inside a file so it doesn't cause problems with things outside the file
+  with below commented, we can't access cart variable in cart.js
+get a variable out of a file
+add type="module" attribute (lets amazon.js get variables from other files)
+export
+import-->
+    <!-- <script src="data/cart.js"></script> -->
+    <!-- <script src="data/products.js"></script> -->
+    <script type="module" src="scripts/amazon.js"></script>
   </body>
 </html>

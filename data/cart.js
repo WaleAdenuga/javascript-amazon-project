@@ -1,4 +1,5 @@
 // keep code organised
-const cart = [
-    
+// cart can be used outside cart.js
+export const cart = [
+
 ];
