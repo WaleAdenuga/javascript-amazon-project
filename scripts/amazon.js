@@ -11,7 +11,9 @@ import
 // all imports have to be at the top of the file
 and we need to use liverserver for modules to work (because you can't just open a single file)
 */
-import { cart } from "../data/cart.js";
+// also do import * as cartModule from ../data/cart.js
+// cartModule.cart - cartModule.addToCart
+import { cart, addToCart } from "../data/cart.js";
 import { products } from "../data/products.js";
 
 /* 
@@ -96,6 +98,35 @@ document.querySelector('.js-products-grid').innerHTML = productsHTML;
 // but data attribute has to start with "data-"
 // it has to be separated by dash though (eg data-ryan-sucks)
 
+function updateCartQuantity() {
+    let cartQuantity = 0;
+
+    cart.forEach((cartItem) => {
+        cartQuantity += cartItem.quantity;
+    });
+    
+    document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
+
+}
+
+function addedTimeout(productId) {
+    const addedMsg = document.querySelector(`.js-added-${productId}`);
+    addedMsg.classList.add('js-added-to-cart-visible');
+
+    // clear the time id if already active
+    let existTimeId = timeoutIdList[productId];
+    if (existTimeId) {
+        clearTimeout(existTimeId);
+    }
+
+    let timeoutId = setTimeout(() => {
+        addedMsg.classList.remove('js-added-to-cart-visible');
+    }, 2000);
+
+    // add timeout id to object using the product id as property
+    timeoutIdList[productId] = timeoutId;
+}
+
 // each product would have its own timeout id
 let timeoutIdList = {};
 document.querySelectorAll('.js-add-to-cart').forEach((button) => {
@@ -106,46 +137,9 @@ document.querySelectorAll('.js-add-to-cart').forEach((button) => {
 
         const quantity = Number (cartSelect.value);
 
-        // check if product already in cart and increment
-        let matchingItem;
-        cart.forEach((item) => {
-            if (productId === item.productId) {
-                matchingItem = item;
-            }
-        });
-
-        if (matchingItem) {
-            matchingItem.quantity += quantity;
-        } else { // new cart entry
-            cart.push({
-                productId,
-                quantity
-            });
-        }
-
-        let cartQuantity = 0;
-
-        cart.forEach((item) => {
-            cartQuantity += item.quantity;
-        });
-        
-        document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
-
-        const addedMsg = document.querySelector(`.js-added-${productId}`);
-        addedMsg.classList.add('js-added-to-cart-visible');
-
-        // clear the time id if already active
-        let existTimeId = timeoutIdList[productId];
-        if (existTimeId) {
-            clearTimeout(existTimeId);
-        }
-
-        let timeoutId = setTimeout(() => {
-            addedMsg.classList.remove('js-added-to-cart-visible');
-        }, 2000);
-
-        // add timeout id to object using the product id as property
-        timeoutIdList[productId] = timeoutId;
+        addToCart(productId, quantity);
+        updateCartQuantity();
+        addedTimeout(productId);
 
     });
 });
