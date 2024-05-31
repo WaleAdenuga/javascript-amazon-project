@@ -15,7 +15,7 @@ not every library has an esm version so you might have to use script tags
 */
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 
-hello();
+/* hello();
 // external libraries - code outside of our project
 // lets us share code and avoid duplication
 // when doing something complicated, find external library first
@@ -25,7 +25,7 @@ const today = dayjs();
 const deliveryDate = today.add(7, 'days');
 console.log(deliveryDate);
 
-console.log(deliveryDate.format('dddd, MMMM D'));
+console.log(deliveryDate.format('dddd, MMMM D')); */
 // to calculate delivery date
 // - get today's date
 // - do calculations
@@ -177,6 +177,7 @@ export function renderOrderSummary() {
       MVC makes sure the page always matches the data
       */
       renderOrderSummary();
+      renderPaymentSummary();
     });
   });
 
@@ -198,6 +199,7 @@ export function renderOrderSummary() {
 
       container.remove();
       updateCheckoutCount();
+      renderPaymentSummary();
     });
     
   });
@@ -253,6 +255,7 @@ export function renderOrderSummary() {
 
     // update checkout up top
     updateCheckoutCount();
+    renderPaymentSummary();
   }
 
   function updateCheckoutCount() {
