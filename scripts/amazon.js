@@ -13,7 +13,7 @@ and we need to use liverserver for modules to work (because you can't just open 
 */
 // also do import * as cartModule from ../data/cart.js
 // cartModule.cart - cartModule.addToCart
-import { cart, addToCart } from "../data/cart.js";
+import { cart, addToCart, calculateCartQuantity } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
 
@@ -99,14 +99,9 @@ document.querySelector('.js-products-grid').innerHTML = productsHTML;
 // but data attribute has to start with "data-"
 // it has to be separated by dash though (eg data-ryan-sucks)
 
-function updateCartQuantity() {
-    let cartQuantity = 0;
-
-    cart.forEach((cartItem) => {
-        cartQuantity += cartItem.quantity;
-    });
-    
-    document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
+updateCartIconQuantity();
+function updateCartIconQuantity() {
+    document.querySelector('.js-cart-quantity').innerHTML = calculateCartQuantity();
 
 }
 
@@ -139,7 +134,7 @@ document.querySelectorAll('.js-add-to-cart').forEach((button) => {
         const quantity = Number (cartSelect.value);
 
         addToCart(productId, quantity);
-        updateCartQuantity();
+        updateCartIconQuantity();
         addedTimeout(productId);
 
     });
