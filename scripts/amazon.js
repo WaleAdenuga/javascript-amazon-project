@@ -1,3 +1,24 @@
+// to create a module, 
+// -> create a file
+// -> don't load the file with <script>
+
+// any variables we create inside the file will be contained inside the file and won't cause naming conflicts
+
+/* get a variable out of a file
+add type="module" attribute
+export
+import
+// all imports have to be at the top of the file
+and we need to use liverserver for modules to work (because you can't just open a single file)
+*/
+import { cart } from "../data/cart.js";
+
+/* 
+modules help prevent naming conflicts
+can also do this import {cart as myCart} from ......
+
+modules help to not worry about order of files loaded in script
+*/
 
 // Main idea of javascript
 // save the data (info about products)
