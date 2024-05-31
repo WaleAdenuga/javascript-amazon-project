@@ -15,6 +15,7 @@ and we need to use liverserver for modules to work (because you can't just open 
 // cartModule.cart - cartModule.addToCart
 import { cart, addToCart } from "../data/cart.js";
 import { products } from "../data/products.js";
+import { formatCurrency } from "./utils/money.js";
 
 /* 
 modules help prevent naming conflicts
@@ -49,7 +50,7 @@ products.forEach((product) => {
         </div>
 
         <div class="product-rating-container">
-            <img class="product-rating-stars"
+            <img class="product-rating-stars" 
             src="images/ratings/rating-${product.rating.stars * 10}.png">
             <div class="product-rating-count link-primary">
                 ${product.rating.count}
@@ -57,7 +58,7 @@ products.forEach((product) => {
         </div>
 
         <div class="product-price">
-            $${(product.priceCents / 100).toFixed(2)}
+            $${formatCurrency(product.priceCents)}
         </div>
 
         <div class="product-quantity-container">
