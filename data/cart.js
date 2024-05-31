@@ -1,6 +1,6 @@
 // keep code organised
 // cart can be used outside cart.js
-export let cart = [
+export let cart = JSON.parse(localStorage.getItem('cart')) || [
     {
         // we use productId to load other things like image, price etc
         // that's called normalizing the data
@@ -31,6 +31,7 @@ export function addToCart(productId, quantity) {
             quantity
         });
     }
+    saveToStorage();
 }
 
 // create a new array, loop through it, add each except this product id
@@ -43,4 +44,11 @@ export function removeFromCart(productId) {
         }
     });
     cart = newCart;
+    saveToStorage();
+}
+
+// whenever we update cart, save to localStorage
+// recall local storage only saves strings so need to use json.stringify
+export function saveToStorage() {
+    localStorage.setItem('cart', JSON.stringify(cart));
 }
