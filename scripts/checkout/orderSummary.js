@@ -3,8 +3,9 @@ import { products , getProduct} from "../../data/products.js";
 import { formatCurrency } from "../utils/money.js";
 // import from external url (esm version of external library)
 import {hello} from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';
-import { deliveryOptions, getDeliveryOption } from "../../data/deliveryOptions.js"; 
+import { deliveryOptions, getDeliveryOption, calculateDeliveryDate } from "../../data/deliveryOptions.js"; 
 import { renderPaymentSummary } from "./paymentSummary.js";
+import { renderCheckoutHeader } from "./checkoutHeader.js";
 /* 
 default export
 used when we only want to export one thing
@@ -55,12 +56,7 @@ export function renderOrderSummary() {
     const deliveryOptionId = cartItem.deliveryOptionId;
     const deliveryOption = getDeliveryOption(deliveryOptionId);
 
-    const today = dayjs();
-    const deliveryDate = today.add(
-      deliveryOption.deliveryDays,
-      'days'
-    )
-    const dateString = deliveryDate.format('dddd, MMMM D');
+    const dateString = calculateDeliveryDate(deliveryOption)
 
     cartSumaryHTML +=
       `
@@ -115,9 +111,6 @@ export function renderOrderSummary() {
 
   document.querySelector('.js-order-summary').innerHTML = cartSumaryHTML;
 
-  updateCheckoutCount();
-
-
   // loop through delivery options created in .js
   // for each generate html
   // combine all together
@@ -127,12 +120,7 @@ export function renderOrderSummary() {
 
     deliveryOptions.forEach((deliveryOption) => {
 
-      const today = dayjs();
-      const deliveryDate = today.add(
-        deliveryOption.deliveryDays,
-        'days'
-      );
-      const dateString = deliveryDate.format('dddd, MMMM D');
+      const dateString = calculateDeliveryDate(deliveryOption);
 
       const priceString = (deliveryOption.priceCents === 0) ? 'FREE'
       : `$${formatCurrency(deliveryOption.priceCents)} - `;
@@ -195,11 +183,9 @@ export function renderOrderSummary() {
       removeFromCart(productId);
       console.log(cart);
 
-      let container = document.querySelector(`.js-cart-item-container-${productId}`);
-
-      container.remove();
-      updateCheckoutCount();
+      renderOrderSummary();
       renderPaymentSummary();
+      renderCheckoutHeader();
     });
     
   });
@@ -250,17 +236,13 @@ export function renderOrderSummary() {
 
     container.classList.remove('is-editing-quantity');
 
-    // update quantity displayed
-    document.querySelector(`.js-quantity-label-${productId}`).innerHTML = newQuantity;
+    // update quantity displayed - no longer needed since we re-render the page
+    //document.querySelector(`.js-quantity-label-${productId}`).innerHTML = newQuantity;
 
     // update checkout up top
-    updateCheckoutCount();
+    renderCheckoutHeader();
+    renderOrderSummary();
     renderPaymentSummary();
-  }
-
-  function updateCheckoutCount() {
-    let cartQuantity = calculateCartQuantity();
-    document.querySelector('.js-checkout-count').innerHTML = `${cartQuantity} items`;
   }
 
 }
