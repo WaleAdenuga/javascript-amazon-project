@@ -6,6 +6,8 @@ import { cart , addToCart, loadFromStorage } from '../../data/cart.js';
 // flaky test - sometimes passes and sometimes fails - eg trying to get cart from local storage when it might not exist
 
 // solve flaky?  jasmine has mocks which lets us replace a method with a fake version
+
+// unit tests - tests one piece, integration test combines multipe units 
 describe('test suite: addToCart', () => {
     it('adds an existing product to cart', () => {
         // mock only runs for one test
