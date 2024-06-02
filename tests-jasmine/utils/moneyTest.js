@@ -1,8 +1,8 @@
-import formatCurrency from "../scripts/utils/money.js";
+import formatCurrency from "../../scripts/utils/money.js";
 
 // create a test suite using jasmine
 
-// you can use describe in describe
+// you can use describe in describe 
 describe('test suite: formatCurrency', () => {
     it('convert cents into dollars', () => {
         expect(formatCurrency(2095)).toEqual('20.95');

@@ -105,6 +105,8 @@ function updateCartIconQuantity() {
 
 }
 
+// each product would have its own timeout id
+let timeoutIdList = {};
 function addedTimeout(productId) {
     const addedMsg = document.querySelector(`.js-added-${productId}`);
     addedMsg.classList.add('js-added-to-cart-visible');
@@ -123,8 +125,7 @@ function addedTimeout(productId) {
     timeoutIdList[productId] = timeoutId;
 }
 
-// each product would have its own timeout id
-let timeoutIdList = {};
+
 document.querySelectorAll('.js-add-to-cart').forEach((button) => {
     button.addEventListener('click', ()=> {
 
@@ -132,6 +133,7 @@ document.querySelectorAll('.js-add-to-cart').forEach((button) => {
         const cartSelect = document.querySelector(`.js-quantity-selector-${productId}`);
 
         const quantity = Number (cartSelect.value);
+        console.log(quantity);
 
         addToCart(productId, quantity);
         updateCartIconQuantity();
