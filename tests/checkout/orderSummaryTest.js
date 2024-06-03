@@ -70,6 +70,22 @@ describe('test suite: renderOrderSummary', () => {
         expect(
             document.querySelector(`.js-product-quantity-test-${productId2}`).innerText
         ).toContain('Quantity: 1');
+
+        expect (
+            document.querySelector(`.js-product-name-test-${productId1}`).innerText
+        ).toEqual('Black and Gray Athletic Cotton Socks - 6 Pairs');
+
+        expect (
+            document.querySelector(`.js-product-name-test-${productId2}`).innerText
+        ).toEqual('Intermediate Size Basketball');
+
+        expect (
+            document.querySelector(`.js-product-price-test-${productId1}`).innerText
+        ).toEqual('$10.90');
+
+        expect (
+            document.querySelector(`.js-product-price-test-${productId2}`).innerText
+        ).toEqual('$20.95');
         
     });
 
@@ -90,6 +106,14 @@ describe('test suite: renderOrderSummary', () => {
         expect (
             document.querySelector(`.js-cart-item-container-${productId2}`)
         ).not.toEqual(null);
+
+        expect (
+            document.querySelector(`.js-product-name-test-${productId2}`).innerText
+        ).toEqual('Intermediate Size Basketball');
+
+        expect (
+            document.querySelector(`.js-product-price-test-${productId2}`).innerText
+        ).toEqual('$20.95');
 
         // after deleting, is the cart updated
         expect(cart.length).toEqual(1);

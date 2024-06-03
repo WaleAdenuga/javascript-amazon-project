@@ -1,4 +1,4 @@
-import { cart , addToCart, loadFromStorage } from '../../data/cart.js';
+import { cart , addToCart, loadFromStorage, removeFromCart } from '../../data/cart.js';
 
 
 // test coverage - how much of the code is being tested, eg test each condition of the if statement
@@ -9,10 +9,13 @@ import { cart , addToCart, loadFromStorage } from '../../data/cart.js';
 
 // unit tests - tests one piece, integration test combines multipe units 
 describe('test suite: addToCart', () => {
-    it('adds an existing product to cart', () => {
+
+    beforeEach(() => {
         // mock only runs for one test
         spyOn(localStorage, 'setItem');
-        
+    });
+
+    it('adds an existing product to cart', () => {
         // replace localStorage.getItem with a fake version
         // anonymous func in callFake replaces that one
         spyOn(localStorage, 'getItem').and.callFake(() => {
@@ -20,7 +23,7 @@ describe('test suite: addToCart', () => {
                 {
                     productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
                     quantity: 1,
-                    deliveryOptionId: 1
+                    deliveryOptionId: '1'
                 }
             ]);
         }); 
@@ -31,14 +34,16 @@ describe('test suite: addToCart', () => {
         addToCart('e43638ce-6aa0-4b85-b27f-e1d07eb678c6', 2);
         expect(cart.length).toEqual(1);
         expect(localStorage.setItem).toHaveBeenCalledTimes(1);
+        expect(localStorage.setItem).toHaveBeenCalledWith('cart', JSON.stringify([{
+            productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
+            quantity: 3,
+            deliveryOptionId: '1'
+          }]));
         expect(cart[0].productId).toEqual('e43638ce-6aa0-4b85-b27f-e1d07eb678c6');
         expect(cart[0].quantity).toEqual(3);
     });
 
     it('adds a new product to cart', () => {
-        // replace localStorage.setItem with a fake version
-     
-        spyOn(localStorage, 'setItem');
 
         // replace localStorage.getItem with a fake version
         // anonymous func in callFake replaces that one
@@ -52,7 +57,56 @@ describe('test suite: addToCart', () => {
         addToCart('e43638ce-6aa0-4b85-b27f-e1d07eb678c6', 2);
         expect(cart.length).toEqual(1);
         expect(localStorage.setItem).toHaveBeenCalledTimes(1);
+        expect(localStorage.setItem).toHaveBeenCalledWith('cart', JSON.stringify([{
+            productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
+            quantity: 2,
+            deliveryOptionId: '1'
+          }]));
         expect(cart[0].productId).toEqual('e43638ce-6aa0-4b85-b27f-e1d07eb678c6');
         expect(cart[0].quantity).toEqual(2);
     });
+});
+
+describe('test suite: removeFromCart', () => {
+    beforeEach(() => {
+        // mock only runs for one test
+        spyOn(localStorage, 'setItem');
+
+        // replace localStorage.getItem with a fake version
+        // anonymous func in callFake replaces that one
+        spyOn(localStorage, 'getItem').and.callFake(() => {
+            return JSON.stringify([
+                {
+                    productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
+                    quantity: 1,
+                    deliveryOptionId: '1'
+                }
+            ]);
+        });
+
+        // after mocking, reload the cart
+        loadFromStorage();
+    });
+
+    it('removes an existing product from cart', () => {
+        removeFromCart('e43638ce-6aa0-4b85-b27f-e1d07eb678c6');
+        expect(cart.length).toEqual(0);
+        expect(localStorage.setItem).toHaveBeenCalledTimes(1);
+        expect(localStorage.setItem).toHaveBeenCalledWith('cart', JSON.stringify([]));
+    });
+
+    it('remves a non-existing product from cart', () => {
+        removeFromCart('non-existing-product');
+        expect(cart.length).toEqual(1);
+        expect(cart[0].productId).toEqual('e43638ce-6aa0-4b85-b27f-e1d07eb678c6');
+        expect(cart[0].quantity).toEqual(1);
+        expect(localStorage.setItem).toHaveBeenCalledTimes(1);
+        expect(localStorage.setItem).toHaveBeenCalledWith('cart', JSON.stringify([{
+            productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
+            quantity: 1,
+            deliveryOptionId: '1'
+          }]));
+
+    });
+    
 });

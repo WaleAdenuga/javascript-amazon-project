@@ -19,4 +19,8 @@ describe('test suite: formatCurrency', () => {
     it('rounds down', () => {
         expect(formatCurrency(2000.4)).toEqual('20.00');
     });
+
+    it('negative number', () => {
+        expect(formatCurrency(-5)).toEqual('-0.05');
+    });
 });
