@@ -75,6 +75,8 @@ products.forEach((product) => {
                 <option value="10">10</option>
             </select>
         </div>
+        <!--polymorphism - using a method without knowing its class -->
+        ${product.extraInfoHTML()}
 
         <div class="product-spacer"></div>
 

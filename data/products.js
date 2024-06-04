@@ -33,6 +33,35 @@ class Product {
   getPrice() {
     return `$${formatCurrency(this.priceCents)}`;
   }
+
+  extraInfoHTML() {
+    return '';
+  }
+}
+
+// inheritance - reuse code between classes
+// clothing inherits all properties and methods from Product - its for when one class is a more specific type of another class
+class Clothing extends Product {
+  sizeChartLink;
+
+  // if you don't create a constructor, by default, it runs the parent constructor
+  constructor(productDetails) {
+    super(productDetails); //call parent class and sets other properties defined in the parent class
+    this.sizeChartLink = productDetails.sizeChartLink;
+  }
+
+  // overrides the parent method
+  extraInfoHTML() {
+    // call parent method if you really need it
+    //super.extraInfoHTML();
+    // <a></a> creates a link that redirects to another page
+    // target equals blank redirects to a new page
+    return `
+      <a href="${this.sizeChartLink}" target="_blank">
+        Size chart
+      </a>
+    `;
+  }
 }
 
 export const products = [
@@ -79,7 +108,7 @@ export const products = [
       "apparel",
       "mens"
     ],
-    type: "clothing",
+    type: "clothing", //discriminator property
     sizeChartLink: "images/clothing-size-chart.png"
   },
   {
@@ -725,6 +754,9 @@ export const products = [
     ]
   }
 ].map((productDetails) => {
+  if (productDetails.type === 'clothing') {
+    return new Clothing(productDetails);
+  }
   return new Product(productDetails);
 });
 // remember map returns a new array
