@@ -4,17 +4,17 @@ class Cart {
 
     // add property to class, every generated object has this property
     cartItems;
-    localStorageKey;
+    #localStorageKey; // private property, can only be used inside the class
 
     // constructor is for setup code
     constructor(localStorageKey) {
-        this.localStorageKey = localStorageKey;
-        this.loadFromStorage();
+        this.#localStorageKey = localStorageKey;
+        this.#loadFromStorage(); // private method only used by the class
     }
 
     // every object has this method
-    loadFromStorage() {
-        this.cartItems = JSON.parse(localStorage.getItem(this.localStorageKey)) || [
+    #loadFromStorage() {
+        this.cartItems = JSON.parse(localStorage.getItem(this.#localStorageKey)) || [
             {
                 // we use productId to load other things like image, price etc
                 // that's called normalizing the data
@@ -33,7 +33,7 @@ class Cart {
     // whenever we update cart, save to localStorage
     // recall local storage only saves strings so need to use json.stringify
     saveToStorage() {
-        localStorage.setItem(this.localStorageKey, JSON.stringify(this.cartItems));
+        localStorage.setItem(this.#localStorageKey, JSON.stringify(this.cartItems));
     }
 
     // group cart functions together
