@@ -104,8 +104,37 @@ const object2 = {
   b: this.a, // returns undefined as object 2 has not been created yet
 } */
 
-/*   */
 
+// load products array from the backend
+
+export let products = [];
+
+export function loadProducts(func) {
+  const xhr = new XMLHttpRequest();
+
+  xhr.addEventListener('load', () => {
+    products = JSON.parse(xhr.response).map((productDetails) => {
+      if (productDetails.type === 'clothing') {
+        return new Clothing(productDetails);
+      } else if (productDetails.type === 'appliance') {
+        return new Appliance(productDetails);
+      }
+      return new Product(productDetails);
+    });
+
+    // run necessary functions after parsing and assurance http response is received - func is a callback, a function to run in the future, func can also be anonymous, checkout checkout.js
+    func();
+
+    console.log('load products');
+  });
+
+  xhr.open('GET', 'https://supersimplebackend.dev/products');
+  xhr.send();
+
+}
+
+/*   */
+/* 
 export const products = [
   {
     id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
@@ -814,5 +843,5 @@ export const products = [
     return new Appliance(productDetails);
   }
   return new Product(productDetails);
-});
+}); */
 // remember map returns a new array

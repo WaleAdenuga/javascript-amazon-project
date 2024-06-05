@@ -14,7 +14,7 @@ and we need to use liverserver for modules to work (because you can't just open 
 // also do import * as cartModule from ../data/cart.js
 // cartModule.cart - cartModule.addToCart
 import { cart } from "../data/cart-class.js";
-import { products } from "../data/products.js";
+import { products, loadProducts } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
 
 /* 
@@ -31,14 +31,19 @@ modules help to not worry about order of files loaded in script
 
 // use an object to represent each product since you can group multiple values together
 
-let productsHTML = '';
+// we need to wait for the response to finish before loading other code. recall that functions are values in javascript and you can use it as a parameter
+loadProducts(renderProductsGrid);
 
-// recall foreach takes each object in array, saves in product and then runs the function
-// we want to create some html for each object
-// benefit of generating html is you can just add another object to the array without duplicating html code
-products.forEach((product) => {
-    // accumulator pattern
-    productsHTML += `
+function renderProductsGrid() {
+
+    let productsHTML = '';
+
+    // recall foreach takes each object in array, saves in product and then runs the function
+    // we want to create some html for each object
+    // benefit of generating html is you can just add another object to the array without duplicating html code
+    products.forEach((product) => {
+        // accumulator pattern
+        productsHTML += `
     <div class="product-container">
         <div class="product-image-container">
             <img class="product-image"
@@ -91,56 +96,57 @@ products.forEach((product) => {
         </button>
     </div>
     `;
-})
+    })
 
-document.querySelector('.js-products-grid').innerHTML = productsHTML;
+    document.querySelector('.js-products-grid').innerHTML = productsHTML;
 
-// data attribute of html
-// it allows us to attach any information to an element
-// data attributes have same syntax (name - value)
-// but data attribute has to start with "data-"
-// it has to be separated by dash though (eg data-ryan-sucks)
+    // data attribute of html
+    // it allows us to attach any information to an element
+    // data attributes have same syntax (name - value)
+    // but data attribute has to start with "data-"
+    // it has to be separated by dash though (eg data-ryan-sucks)
 
-updateCartIconQuantity();
-function updateCartIconQuantity() {
-    document.querySelector('.js-cart-quantity').innerHTML = cart.calculateCartQuantity();
+    updateCartIconQuantity();
+    function updateCartIconQuantity() {
+        document.querySelector('.js-cart-quantity').innerHTML = cart.calculateCartQuantity();
 
-}
-
-// each product would have its own timeout id
-let timeoutIdList = {};
-function addedTimeout(productId) {
-    const addedMsg = document.querySelector(`.js-added-${productId}`);
-    addedMsg.classList.add('js-added-to-cart-visible');
-
-    // clear the time id if already active
-    let existTimeId = timeoutIdList[productId];
-    if (existTimeId) {
-        clearTimeout(existTimeId);
     }
 
-    let timeoutId = setTimeout(() => {
-        addedMsg.classList.remove('js-added-to-cart-visible');
-    }, 2000);
+    // each product would have its own timeout id
+    let timeoutIdList = {};
+    function addedTimeout(productId) {
+        const addedMsg = document.querySelector(`.js-added-${productId}`);
+        addedMsg.classList.add('js-added-to-cart-visible');
 
-    // add timeout id to object using the product id as property
-    timeoutIdList[productId] = timeoutId;
-}
+        // clear the time id if already active
+        let existTimeId = timeoutIdList[productId];
+        if (existTimeId) {
+            clearTimeout(existTimeId);
+        }
+
+        let timeoutId = setTimeout(() => {
+            addedMsg.classList.remove('js-added-to-cart-visible');
+        }, 2000);
+
+        // add timeout id to object using the product id as property
+        timeoutIdList[productId] = timeoutId;
+    }
 
 
-document.querySelectorAll('.js-add-to-cart').forEach((button) => {
-    button.addEventListener('click', ()=> {
+    document.querySelectorAll('.js-add-to-cart').forEach((button) => {
+        button.addEventListener('click', () => {
 
-        const {productId} = button.dataset; // productId from product-id
-        const cartSelect = document.querySelector(`.js-quantity-selector-${productId}`);
+            const { productId } = button.dataset; // productId from product-id
+            const cartSelect = document.querySelector(`.js-quantity-selector-${productId}`);
 
-        const quantity = Number (cartSelect.value);
-        console.log(quantity);
+            const quantity = Number(cartSelect.value);
+            console.log(quantity);
 
-        cart.addToCart(productId, quantity);
-        updateCartIconQuantity();
-        addedTimeout(productId);
+            cart.addToCart(productId, quantity);
+            updateCartIconQuantity();
+            addedTimeout(productId);
 
+        });
     });
-});
 
+}
