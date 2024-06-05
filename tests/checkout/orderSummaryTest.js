@@ -1,5 +1,6 @@
 import { renderOrderSummary } from "../../scripts/checkout/orderSummary.js";
 import {cart} from '../../data/cart-class.js';
+import { loadProducts } from "../../data/products.js";
 
 // Test how the page looks
 // Test how the page behaves
@@ -8,6 +9,15 @@ describe('test suite: renderOrderSummary', () => {
     // global variables for product
     const productId1 = 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6';
     const productId2 = '15b6fc6f-327a-4ec4-896f-486349e85a3d';
+
+    // before all tests run
+    // tests won't go to next step if we don't call done()
+    // done can also be used in beforeEach and it() to wait for backend code to finish
+    beforeAll((done) => {
+        loadProducts(() => {
+            done(); // when load products are done, it goes to beforeEach
+        });
+    });
 
     // run setup code before each test
     beforeEach(() => {
