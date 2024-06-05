@@ -2,6 +2,7 @@ import { cart } from "../../data/cart-class.js";
 import { getProduct } from "../../data/products.js";
 import { getDeliveryOption } from "../../data/deliveryOptions.js";
 import { formatCurrency } from "../utils/money.js";
+import { addOrder } from "../../data/orders.js";
 
 export function renderPaymentSummary() {
   // save the data
@@ -62,12 +63,50 @@ export function renderPaymentSummary() {
             $${formatCurrency(totalCents)}</div>
           </div>
 
-          <button class="place-order-button button-primary">
+          <button class="place-order-button button-primary js-place-order">
             Place your order
           </button>
     
     `;
 
   document.querySelector('.js-payment-summary').innerHTML = paymentSummaryHTML;
+
+  // use async await and promises to place an order
+  // we'll make a request to the backend to create the order
+  // we'll be sending data to the backemd
+  /* 
+    GET - get something
+    POST - create smthg (send something)
+    PUT - update smthg
+    DELETE -delete smthg
+  */
+  document.querySelector('.js-place-order').addEventListener('click', async () => {
+    try {
+      // recall closest function must be async
+      const response = await fetch('https://supersimplebackend.dev/orders', {
+        method: 'POST',
+        headers: { //gives backend more info about or request
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ //actual data being sent, we need to send ab object with the property cart which contains the cart array.
+          cart: cart
+
+        })
+      })
+
+      // will return the order created by the backend, .json is also a promise so use await
+      const order = await response.json();
+      console.log(order);
+      addOrder(order);
+
+    } catch (error) {
+      console.log('Unexpected error. Try again later');
+    }
+
+    //window.location lets us control the url at the top of the browser
+    // change href - orders.html is a file path since this is running from checkout.js which is running from checkut.html
+    window.location.href = 'orders.html';
+    
+  });
 
 }
