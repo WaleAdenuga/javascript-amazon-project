@@ -106,7 +106,7 @@ class Cart {
 console.log('cart-class');
 
 // each gennerated object is an instance of the class
-const cart = new Cart('cart-oop');
+export const cart = new Cart('cart-oop');
 const businessCart = new Cart('cart-business');
 
 

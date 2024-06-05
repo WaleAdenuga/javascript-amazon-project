@@ -1,5 +1,5 @@
 import { renderOrderSummary } from "../../scripts/checkout/orderSummary.js";
-import {cart, loadFromStorage } from '../../data/cart.js';
+import {cart} from '../../data/cart-class.js';
 
 // Test how the page looks
 // Test how the page behaves
@@ -24,7 +24,7 @@ describe('test suite: renderOrderSummary', () => {
 
         // replace localStorage.getItem with a fake version
         // anonymous func in callFake replaces that one
-        
+/*         
         spyOn(localStorage, 'getItem').and.callFake(() => {
             return JSON.stringify(
                 [
@@ -42,10 +42,26 @@ describe('test suite: renderOrderSummary', () => {
                     }
                 ]
             );
-        }); 
+        }); */ 
+        // replace spy function with normal get
+
+        cart.cartItems = [
+            {
+                // we use productId to load other things like image, price etc
+                // that's called normalizing the data
+                productId: productId1,
+                quantity: 2,
+                deliveryOptionId: '1'
+            },
+            {
+                productId: productId2,
+                quantity: 1,
+                deliveryOptionId: '2'
+            }
+        ];
 
         // after mocking, reload the cart
-        loadFromStorage();
+        //loadFromStorage();
         renderOrderSummary();
     });
 
@@ -116,8 +132,8 @@ describe('test suite: renderOrderSummary', () => {
         ).toEqual('$20.95');
 
         // after deleting, is the cart updated
-        expect(cart.length).toEqual(1);
-        expect(cart[0].productId).toEqual(productId2);
+        expect(cart.cartItems.length).toEqual(1);
+        expect(cart.cartItems[0].productId).toEqual(productId2);
     });
 });
 
