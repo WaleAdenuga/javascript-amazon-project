@@ -92,3 +92,20 @@ export function updateDeliveryOption(productId, deliveryOptionId) {
 
     saveToStorage();
 }
+
+export function loadCart(func) {
+    const xhr = new XMLHttpRequest();
+  
+    xhr.addEventListener('load', () => {
+        console.log(xhr.response);
+  
+      // run necessary functions after parsing and assurance http response is received - func is a callback, a function to run in the future, func can also be anonymous, checkout checkout.js
+      func();
+  
+      console.log('load cart');
+    });
+  
+    xhr.open('GET', 'https://supersimplebackend.dev/cart');
+    xhr.send();
+  
+  }
