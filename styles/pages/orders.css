@@ -99,6 +99,10 @@
   align-items: center;
 }
 
+.js-order-container {
+  margin-bottom: 20px;
+}
+
 @media (max-width: 800px) {
   .order-details-grid {
     grid-template-columns: 110px 1fr;

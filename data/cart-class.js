@@ -110,8 +110,8 @@ export const cart = new Cart('cart-oop');
 const businessCart = new Cart('cart-business');
 
 
-console.log(cart);
-console.log(businessCart);
+//console.log(cart);
+//console.log(businessCart);
 
 // check if object is instance of class
-console.log(businessCart instanceof Cart);
+//console.log(businessCart instanceof Cart);

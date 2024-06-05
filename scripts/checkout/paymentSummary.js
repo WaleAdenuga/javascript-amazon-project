@@ -2,7 +2,7 @@ import { cart } from "../../data/cart-class.js";
 import { getProduct } from "../../data/products.js";
 import { getDeliveryOption } from "../../data/deliveryOptions.js";
 import { formatCurrency } from "../utils/money.js";
-import { addOrder } from "../../data/orders.js";
+import { fullOrders } from "../../data/orders.js";
 
 export function renderPaymentSummary() {
   // save the data
@@ -97,7 +97,7 @@ export function renderPaymentSummary() {
       // will return the order created by the backend, .json is also a promise so use await
       const order = await response.json();
       console.log(order);
-      addOrder(order);
+      fullOrders.addOrder(order);
 
     } catch (error) {
       console.log('Unexpected error. Try again later');
@@ -106,6 +106,8 @@ export function renderPaymentSummary() {
     //window.location lets us control the url at the top of the browser
     // change href - orders.html is a file path since this is running from checkout.js which is running from checkut.html
     window.location.href = 'orders.html';
+
+    // URL parameter - to know which order you're actually tracking, create parameter by changing url itself eg www.test.com/orders.html?orderId=123. You can save data in that url and use javascript to get that data
     
   });
 

@@ -13,14 +13,13 @@ describe('test suite: renderOrderSummary', () => {
     // before all tests run
     // tests won't go to next step if we don't call done()
     // done can also be used in beforeEach and it() to wait for backend code to finish
-    beforeAll((done) => {
+    beforeAll(async () => {
         /* loadProducts(() => {
             done(); // when load products are done, it goes to beforeEach
         }); */
         // replace with loadProductsFetch which uses a promise, not callbacks
-        loadProductsFetch().then(() => {
-            done(); // when load products are done, it goes to beforeEach
-        });
+        // when you make async, you have to remove done in parameter list
+        await loadProductsFetch();
     });
 
     // run setup code before each test

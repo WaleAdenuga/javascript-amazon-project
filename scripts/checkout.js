@@ -2,7 +2,7 @@ import { renderOrderSummary } from "./checkout/orderSummary.js";
 import { renderPaymentSummary } from "./checkout/paymentSummary.js";
 import { renderCheckoutHeader } from "./checkout/checkoutHeader.js";
 import { loadProducts, loadProductsFetch } from "../data/products.js";
-import { loadCart } from "../data/cart.js"
+import { loadCart, loadCartFetch } from "../data/cart.js"
 // runs all code without importing anything
 //import "../data/cart-class.js";
 //import "../data/car.js"
@@ -74,10 +74,10 @@ async function loadPage() {
 
         //throw 'error1'; // manually trigger an error
 
-        await loadProductsFetch();
+        //await loadProductsFetch();
 
         // asyunc await can only be used with promises, it doesn't do anything with a callback
-        const value = await new Promise((resolve, reject) => {
+/*         const value = await new Promise((resolve, reject) => {
             
             // 2 ways to manually trigger an error in promises
             // throw 'error 3'; --> throw does not run in the future
@@ -87,7 +87,14 @@ async function loadPage() {
                 //reject('error3');
                 resolve('value3');// goes to next step in then, whatever is resolved can be saved in a variable when using await
             });
-        });
+        }); */
+
+        //await loadCartFetch();
+
+        await Promise.all([
+           loadProductsFetch(),
+           loadCartFetch() 
+        ]);
 
         // will log 'value3' - what's in resolve
         //console.log(value);

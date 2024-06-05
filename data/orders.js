@@ -1,12 +1,25 @@
-export const orders = JSON.parse(localStorage.getItem('orders')) || [];
+class Order {
+    orders;
+    #localStorageKey;
 
-export function addOrder(order) {
-    // add order to the front of the array
-    orders.unshift(order);
-    saveToStorage();
+    constructor(localStorageKey) {
+        this.#localStorageKey = localStorageKey;
+        this.#loadFromStorage()
+    }
+
+    addOrder(order) {
+        // add order to the front of the array
+        this.orders.unshift(order);
+        saveToStorage();
+    }
+    
+    saveToStorage() {
+        localStorage.setItem('orders', JSON.stringify(this.orders));
+    }
+
+    #loadFromStorage() {
+        this.orders = JSON.parse(localStorage.getItem(this.#localStorageKey)) || [];
+    }
 }
 
-function saveToStorage() {
-    localStorage.setItem('orders', JSON.stringify(orders));
-
-}
+export const fullOrders = new Order('orders');
