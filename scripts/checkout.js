@@ -34,35 +34,63 @@ import { loadCart } from "../data/cart.js"
 });
  */
 // we can run multiple promises at the same time. Promise.all lets us run multiple promises at the same time and wait for all of them to finish
-
-Promise.all([
-    /* new Promise((resolve) => {
-        loadProducts(() => {
-            resolve('value'); //goes to the next step
-            // promise creates a different thread - next step is separate and its running on its own
-        });
-        // whatever is given to resolve() is passed to then - this lets us share a value between two steps of a promise
-    }) */
-
-    // load products fetch  returns a promise
-    loadProductsFetch(),
-
-    new Promise((resolve) => {
-        loadCart(() => {
-            resolve();// goes to next step in then
-        });
-    })
-
-]).then(
-    (values) => { // values contain 'values' given to resolve in the promises
-        console.log(values);
-        renderCheckoutHeader();
-        renderOrderSummary();
-        renderPaymentSummary();
-    }
-);
- 
 // why promises? multiple callbacks cause a lot of nesting
+// Promise.all([
+//     /* new Promise((resolve) => {
+//         loadProducts(() => {
+//             resolve('value'); //goes to the next step
+//             // promise creates a different thread - next step is separate and its running on its own
+//         });
+//         // whatever is given to resolve() is passed to then - this lets us share a value between two steps of a promise
+//     }) */
+
+//     // load products fetch  returns a promise
+//     loadProductsFetch(),
+
+//     new Promise((resolve) => {
+//         loadCart(() => {
+//             resolve();// goes to next step in then
+//         });
+//     })
+
+// ]).then(
+//     (values) => { // values contain 'values' given to resolve in the promises
+//         console.log(values);
+//         renderCheckoutHeader();
+//         renderOrderSummary();
+//         renderPaymentSummary();
+//     }
+// );
+
+//async await is a shortcut for promises
+// async makes a function return a promise, basically wrapping this code in a promise
+
+async function loadPage() {
+
+    // why we use async - so we can use await. await lets us wait for a promise to finsh before going to the next line - lets is write asynchronous code like normal code
+    // we can only use await when inside an async function
+    // we can't use await in a normal function, the closest function has to be async
+    await loadProductsFetch();
+
+    // asyunc await can only be used with promises, it doesn't do anything with a callback
+    const value = await new Promise((resolve) => {
+        loadCart(() => {
+            resolve('value3');// goes to next step in then, whatever is resolved can be saved in a variable when using await
+        });
+    });
+
+    // will log 'value3' - what's in resolve
+    console.log(value);
+
+    renderCheckoutHeader();
+    renderOrderSummary();
+    renderPaymentSummary();
+    
+
+    //return 'value2'; // this gets converted to resolve(value2)
+}
+
+loadPage();
 
 /* loadProducts(() => {
     loadCart(() => {
