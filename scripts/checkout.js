@@ -70,18 +70,31 @@ async function loadPage() {
     // why we use async - so we can use await. await lets us wait for a promise to finsh before going to the next line - lets is write asynchronous code like normal code
     // we can only use await when inside an async function
     // we can't use await in a normal function, the closest function has to be async
-    await loadProductsFetch();
+    try { //try/catch for unexpected errors
 
-    // asyunc await can only be used with promises, it doesn't do anything with a callback
-    const value = await new Promise((resolve) => {
-        loadCart(() => {
-            resolve('value3');// goes to next step in then, whatever is resolved can be saved in a variable when using await
+        //throw 'error1'; // manually trigger an error
+
+        await loadProductsFetch();
+
+        // asyunc await can only be used with promises, it doesn't do anything with a callback
+        const value = await new Promise((resolve, reject) => {
+            
+            // 2 ways to manually trigger an error in promises
+            // throw 'error 3'; --> throw does not run in the future
+            // reject is a function and it lets us throw an error in the future///
+
+            loadCart(() => {
+                //reject('error3');
+                resolve('value3');// goes to next step in then, whatever is resolved can be saved in a variable when using await
+            });
         });
-    });
 
-    // will log 'value3' - what's in resolve
-    console.log(value);
-
+        // will log 'value3' - what's in resolve
+        //console.log(value);
+        
+    } catch (error) {// error contains info about the error
+        console.log('Unexpected error. Please try again later');
+    }
     renderCheckoutHeader();
     renderOrderSummary();
     renderPaymentSummary();
