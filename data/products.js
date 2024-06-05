@@ -133,6 +133,37 @@ export function loadProducts(func) {
 
 }
 
+// you can also make http requests using fetch, fetch uses a promise to get a response
+
+export function loadProductsFetch() {
+  // by default, fetch makes a GET request
+  // when it gets a response, it goes to the next step, that response is saved in parameter 'response'
+  const promise = fetch('https://supersimplebackend.dev/products').then((response) => {
+    //get data attached to response
+    // returns.json is asynchronous and returns a promise
+    return response.json();
+    // when response.json is finished, it goes to the next step and saves the response in productsData
+    // response does the json.parse already
+  }).then ((productsData) => {
+    console.log(productsData);
+    products = productsData.map((productDetails) => {
+      if (productDetails.type === 'clothing') {
+        return new Clothing(productDetails);
+      } else if (productDetails.type === 'appliance') {
+        return new Appliance(productDetails);
+      }
+      return new Product(productDetails);
+    });
+
+    console.log('load products');
+  });
+
+  return promise;
+}
+
+/* loadProductsFetch().then(() => {
+  console.log('nest steps');
+}); */
 
 
 /*   */

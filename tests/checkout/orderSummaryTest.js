@@ -1,6 +1,6 @@
 import { renderOrderSummary } from "../../scripts/checkout/orderSummary.js";
 import {cart} from '../../data/cart-class.js';
-import { loadProducts } from "../../data/products.js";
+import { loadProducts, loadProductsFetch} from "../../data/products.js";
 
 // Test how the page looks
 // Test how the page behaves
@@ -14,7 +14,11 @@ describe('test suite: renderOrderSummary', () => {
     // tests won't go to next step if we don't call done()
     // done can also be used in beforeEach and it() to wait for backend code to finish
     beforeAll((done) => {
-        loadProducts(() => {
+        /* loadProducts(() => {
+            done(); // when load products are done, it goes to beforeEach
+        }); */
+        // replace with loadProductsFetch which uses a promise, not callbacks
+        loadProductsFetch().then(() => {
             done(); // when load products are done, it goes to beforeEach
         });
     });

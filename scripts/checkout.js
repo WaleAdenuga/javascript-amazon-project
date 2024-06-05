@@ -1,7 +1,7 @@
 import { renderOrderSummary } from "./checkout/orderSummary.js";
 import { renderPaymentSummary } from "./checkout/paymentSummary.js";
 import { renderCheckoutHeader } from "./checkout/checkoutHeader.js";
-import { loadProducts } from "../data/products.js";
+import { loadProducts, loadProductsFetch } from "../data/products.js";
 import { loadCart } from "../data/cart.js"
 // runs all code without importing anything
 //import "../data/cart-class.js";
@@ -36,13 +36,16 @@ import { loadCart } from "../data/cart.js"
 // we can run multiple promises at the same time. Promise.all lets us run multiple promises at the same time and wait for all of them to finish
 
 Promise.all([
-    new Promise((resolve) => {
+    /* new Promise((resolve) => {
         loadProducts(() => {
             resolve('value'); //goes to the next step
             // promise creates a different thread - next step is separate and its running on its own
         });
         // whatever is given to resolve() is passed to then - this lets us share a value between two steps of a promise
-    }),
+    }) */
+
+    // load products fetch  returns a promise
+    loadProductsFetch(),
 
     new Promise((resolve) => {
         loadCart(() => {
