@@ -10,9 +10,9 @@ class Order {
     addOrder(order) {
         // add order to the front of the array
         this.orders.unshift(order);
-        saveToStorage();
+        this.saveToStorage();
     }
-    
+
     saveToStorage() {
         localStorage.setItem('orders', JSON.stringify(this.orders));
     }

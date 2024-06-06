@@ -66,7 +66,7 @@ export function renderPaymentSummary() {
           <button class="place-order-button button-primary js-place-order">
             Place your order
           </button>
-    
+
     `;
 
   document.querySelector('.js-payment-summary').innerHTML = paymentSummaryHTML;
@@ -74,7 +74,7 @@ export function renderPaymentSummary() {
   // use async await and promises to place an order
   // we'll make a request to the backend to create the order
   // we'll be sending data to the backemd
-  /* 
+  /*
     GET - get something
     POST - create smthg (send something)
     PUT - update smthg
@@ -100,7 +100,7 @@ export function renderPaymentSummary() {
       fullOrders.addOrder(order);
 
     } catch (error) {
-      console.log('Unexpected error. Try again later');
+      console.log('Unexpected error. Try again later' + error);
     }
 
     //window.location lets us control the url at the top of the browser
@@ -108,7 +108,7 @@ export function renderPaymentSummary() {
     window.location.href = 'orders.html';
 
     // URL parameter - to know which order you're actually tracking, create parameter by changing url itself eg www.test.com/orders.html?orderId=123. You can save data in that url and use javascript to get that data
-    
+
   });
 
 }
