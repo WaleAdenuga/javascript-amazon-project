@@ -26,6 +26,8 @@ function renderTrackingPage() {
 
     const date = dayjs(orderProduct.estimatedDeliveryTime).format('dddd, MMMM DD');
 
+    let progressBar = calculateProgress(orderDisplayed.orderTime, orderProduct.estimatedDeliveryTime);
+
     let trackingHTML = '';
 
     trackingHTML += 
@@ -50,19 +52,19 @@ function renderTrackingPage() {
         <img class="product-image" src="${matchingProduct.image}">
 
         <div class="progress-labels-container">
-            <div class="progress-label">
+            <div class="progress-label ${(progressBar < 49) ? "current-status" : "" }">
                 Preparing
             </div>
-            <div class="progress-label current-status">
+            <div class="progress-label js-progress-label ${((progressBar > 49) && (progressBar < 100)) ? "current-status" : "" }">
                 Shipped
             </div>
-            <div class="progress-label">
+            <div class="progress-label js-progress-label ${(progressBar === 100) ? "current-status" : "" }">
                 Delivered
             </div>
         </div>
 
         <div class="progress-bar-container">
-            <div class="progress-bar"></div>
+            <div class="progress-bar" style="width:${progressBar}%"></div>
         </div>
     </div>
     `;
@@ -73,3 +75,11 @@ function renderTrackingPage() {
 }
 
 renderTrackingPage();
+
+function calculateProgress(orderTime, deliveryTime) {
+    return (
+        dayjs().diff(dayjs(orderTime)) 
+        / 
+        dayjs(deliveryTime).diff(dayjs(orderTime))
+        ) * 100;
+}
