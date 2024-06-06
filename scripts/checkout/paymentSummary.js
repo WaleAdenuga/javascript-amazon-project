@@ -103,6 +103,10 @@ export function renderPaymentSummary() {
       console.log('Unexpected error. Try again later' + error);
     }
 
+    // After an order, the cart should be empty so clear what we have and remove from local storage
+    cart.cartItems = [];
+    cart.clearCartFromStorage();
+
     //window.location lets us control the url at the top of the browser
     // change href - orders.html is a file path since this is running from checkout.js which is running from checkut.html
     window.location.href = 'orders.html';

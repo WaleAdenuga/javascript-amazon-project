@@ -66,6 +66,14 @@ function renderOrdersPage() {
   document.querySelector('.js-order-summary').innerHTML = ordersHTML;
 
   document.querySelector('.js-order-cart-quantity').innerHTML = cart.calculateCartQuantity();
+
+  document.querySelectorAll(".js-buy-product-again").forEach((element) => {
+    element.addEventListener('click', () => {
+      let elementProductId = element.dataset.productId;
+      cart.addToCart(elementProductId, 1);
+      renderOrdersPage();
+    })
+  });
 }
 
 function renderProducts(order) {
@@ -106,7 +114,7 @@ function renderProducts(order) {
           <div class="product-quantity">
             Quantity: ${product.quantity}
           </div>
-          <button class="buy-again-button button-primary">
+          <button class="buy-again-button button-primary js-buy-product-again" data-product-id=${matchingProduct.id}>
             <img class="buy-again-icon" src="images/icons/buy-again.png">
             <span class="buy-again-message">Buy it again</span>
           </button>
@@ -125,5 +133,6 @@ function renderProducts(order) {
 
   return productsHTML;
 }
+
 
 renderOrdersPage();
