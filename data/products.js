@@ -1,5 +1,14 @@
 import {formatCurrency} from '../scripts/utils/money.js';
 
+export async function loadFromBackend() {
+  // products is not saved to local storage so we have to load from backend, but add an await to ensure it's loaded before main things begin
+  try {
+    await loadProductsFetch();
+  } catch (error) {
+    console.log('Unexpected error, try again later');
+  }
+}
+
 export function getProduct(productId) {
   // de-duplicating or normalizing data
   let matchingProduct;

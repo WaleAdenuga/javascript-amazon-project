@@ -20,6 +20,17 @@ class Order {
     #loadFromStorage() {
         this.orders = JSON.parse(localStorage.getItem(this.#localStorageKey)) || [];
     }
+
+    getOrder(orderId) {
+        let matchingOrder;
+        this.orders.forEach((order) => {
+            if(order.id === orderId) {
+                matchingOrder = order;
+            }
+        });
+
+        return matchingOrder;
+    }
 }
 
 export const fullOrders = new Order('orders');

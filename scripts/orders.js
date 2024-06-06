@@ -2,16 +2,12 @@ import { fullOrders } from "../data/orders.js";
 import { cart } from "../data/cart-class.js";
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import { formatCurrency } from "../scripts/utils/money.js";
-import { getProduct, loadProductsFetch} from "../data/products.js";
+import { getProduct, loadFromBackend} from "../data/products.js";
 
 console.log(fullOrders);
 
-// products is not saved to local storage so we have to load from backend, but add an await to ensure it's loaded before main things begin
-try {
-  await loadProductsFetch();
-} catch (error) {
-  console.log('Unexpected error, try again later');
-}
+// make sure products are loaded from backend before proceeding
+await loadFromBackend();
 
 function renderOrdersPage() {
 
