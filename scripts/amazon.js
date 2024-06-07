@@ -14,7 +14,7 @@ and we need to use liverserver for modules to work (because you can't just open 
 // also do import * as cartModule from ../data/cart.js
 // cartModule.cart - cartModule.addToCart
 import { cart } from "../data/cart-class.js";
-import { products, loadProducts } from "../data/products.js";
+import { products, loadFromBackend } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
 
 /* 
@@ -32,16 +32,18 @@ modules help to not worry about order of files loaded in script
 // use an object to represent each product since you can group multiple values together
 
 // we need to wait for the response to finish before loading other code. recall that functions are values in javascript and you can use it as a parameter
-loadProducts(renderProductsGrid);
+await loadFromBackend();
+checkIfSearch();
 
-function renderProductsGrid() {
+function renderProductsGrid(productsArray) {
+    console.log(productsArray);
 
     let productsHTML = '';
 
     // recall foreach takes each object in array, saves in product and then runs the function
     // we want to create some html for each object
     // benefit of generating html is you can just add another object to the array without duplicating html code
-    products.forEach((product) => {
+    productsArray.forEach((product) => {
         // accumulator pattern
         productsHTML += `
     <div class="product-container">
@@ -149,4 +151,47 @@ function renderProductsGrid() {
         });
     });
 
+    const inputElement = document.querySelector('.js-input-search-bar');
+
+    document.querySelector('.js-search-button').addEventListener('click', () => {
+        openSearch();
+    });
+
+    inputElement.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            openSearch();
+        }
+    });
+
+    function openSearch() {
+        let value = inputElement.value;
+        window.location.href = `amazon.html?search=${value}`;
+    }
+
+}
+
+function checkIfSearch() {
+    const url = new URL(window.location.href);
+
+    // get url parameters sent by search
+    let searchValue;
+    if(url.searchParams.has('search')) {
+        searchValue = url.searchParams.get('search');
+    };
+    let searchResults = [];
+    if(searchValue) {
+        searchResults = products.filter((value) => {
+            //.includes is annoyingly case-sensitive
+            const checkSearch = value.name.toLowerCase().includes(
+                searchValue.toLowerCase());
+            
+            const arraySearch = value.keywords.includes(searchValue.toLowerCase());
+            
+            return (checkSearch || arraySearch);
+        });
+        renderProductsGrid(searchResults); 
+    } else {
+        renderProductsGrid(products);
+    }
+    
 }

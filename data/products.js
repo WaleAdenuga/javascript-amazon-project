@@ -23,6 +23,7 @@ export function getProduct(productId) {
 class Product {
   id;
   image;
+  keywords;
   name;
   rating;
   priceCents;
@@ -33,6 +34,7 @@ class Product {
     this.name = productDetails.name;
     this.rating = productDetails.rating;
     this.priceCents = productDetails.priceCents;
+    this.keywords = productDetails.keywords;
   }
 
   getStarsUrl() {
